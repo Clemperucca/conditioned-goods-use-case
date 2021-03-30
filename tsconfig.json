@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "outDir": "dist",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "module": "commonjs",
+        "target": "es2017",
+        "strict": true,
+        "typeRoots": ["node_modules/@types"],
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "noImplicitThis": false,
+        "baseUrl": ".",
+        "paths": {
+            "*": ["./*"]
+        }
+    },
+    // "include": ["./src/**/*"],
+    "exclude": ["node_modules"]
+}

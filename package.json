@@ -1,0 +1,26 @@
+{
+  "name": "blockchain-backend",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "engines": {
+    "node": ">=12",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "start": "fabric-chaincode-node start",
+    "build": "tsc",
+    "build:watch": "tsc -w"
+  },
+  "engine-strict": true,
+  "license": "MIT",
+  "dependencies": {
+    "fabric-contract-api": "2.2.1",
+    "fabric-shim": "2.2.1",
+    "ts-node": "9.1.1",
+    "tsconfig-paths": "3.9.0"
+  },
+  "devDependencies": {
+    "typescript": "4.2.3"
+  }
+}
