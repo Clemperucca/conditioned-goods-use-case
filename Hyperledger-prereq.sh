@@ -18,7 +18,7 @@ docker pull hyperledger/fabric-peer:2.3
 docker pull hyperledger/fabric-javaenv:2.3
 docker pull hyperledger/fabric-ccenv:2.3
 docker pull hyperledger/fabric-ca
-docker pull hyperledger/fabric-douchdb
+docker pull hyperledger/fabric-couchdb
 
 Docker tag Hyperledger/fabric-tools:2.3 hyperledger/fabric-tools:latest
 Docker tag Hyperledger/fabric-orderer:2.3 hyperledger/fabric-orderer:latest
