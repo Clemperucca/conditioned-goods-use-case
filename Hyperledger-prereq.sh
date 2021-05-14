@@ -11,8 +11,22 @@ sudo systemctl start docker
 sudo systemctl enable docker
 u="$USER"
 sudo usermod -a -G docker $u
-sudo curl -sSL https://bit.ly/2ysbOFE | bash -s -- -d -s
-export PATH=$PWD/bin:$PATH
+
+docker pull hyperledger/fabric-tools:2.3
+docker pull hyperledger/fabric-orderer:2.3
+docker pull hyperledger/fabric-peer:2.3
+docker pull hyperledger/fabric-javaenv:2.3
+docker pull hyperledger/fabric-ccenv:2.3
+docker pull hyperledger/fabric-ca
+docker pull hyperledger/fabric-douchdb
+
+Docker tag Hyperledger/fabric-tools:2.3 hyperledger/fabric-tools:latest
+Docker tag Hyperledger/fabric-orderer:2.3 hyperledger/fabric-orderer:latest
+Docker tag Hyperledger/fabric-peer:2.3 hyperledger/fabric-peer:latest
+Docker tag Hyperledger/fabric-javaenv:2.3 hyperledger/fabric-javaenv:latest
+Docker tag Hyperledger/fabric-ccenv:2.3 hyperledger/fabric-ccenv:latest
+
+
 
 
 
