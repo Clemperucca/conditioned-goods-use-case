@@ -20,11 +20,11 @@ docker pull hyperledger/fabric-ccenv:2.3
 docker pull hyperledger/fabric-ca
 docker pull hyperledger/fabric-couchdb
 
-docker tag Hyperledger/fabric-tools:2.3 hyperledger/fabric-tools:latest
-docker tag Hyperledger/fabric-orderer:2.3 hyperledger/fabric-orderer:latest
-docker tag Hyperledger/fabric-peer:2.3 hyperledger/fabric-peer:latest
-docker tag Hyperledger/fabric-javaenv:2.3 hyperledger/fabric-javaenv:latest
-docker tag Hyperledger/fabric-ccenv:2.3 hyperledger/fabric-ccenv:latest
+docker tag hyperledger/fabric-tools:2.3 hyperledger/fabric-tools:latest
+docker tag hyperledger/fabric-orderer:2.3 hyperledger/fabric-orderer:latest
+docker tag hyperledger/fabric-peer:2.3 hyperledger/fabric-peer:latest
+docker tag hyperledger/fabric-javaenv:2.3 hyperledger/fabric-javaenv:latest
+docker tag hyperledger/fabric-ccenv:2.3 hyperledger/fabric-ccenv:latest
 
 
 
