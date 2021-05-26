@@ -12,6 +12,13 @@ export function toObject<T>(input: Uint8Array): T {
     return JSON.parse(input.toString());
 }
 
+/** 
+ * Wrapper for the JSON.stringify function
+ */
+export function toJson(input) {
+    return JSON.stringify(input);
+}
+
 // TODO: check if it's possible to type iterator.
 /** 
  * Convert a buffer to an Array of JavaScript Objects.

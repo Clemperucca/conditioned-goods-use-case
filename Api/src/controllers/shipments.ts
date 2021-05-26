@@ -6,7 +6,8 @@ import {Shipment} from '../types';
 /**
  * Get shipments.
  */
-export async function getShipments(req: Request, res: Response) {
+export async function getShipments({params}: Request, res: Response) {
+    const {index = "", amount = 50} = params;
     const gateway = await connect();
 
     try {
@@ -17,7 +18,7 @@ export async function getShipments(req: Request, res: Response) {
       const contract = network.getContract('blockchain-backend');
 
       // Query data
-      const result = await contract.evaluateTransaction('getShipments');
+      const result = await contract.evaluateTransaction('getShipments', `${index}`, `${amount}`);
 
       res.json(toObject<Shipment>(result));
     } catch(err) {

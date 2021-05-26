@@ -22,6 +22,21 @@ export const getShipmentSchema: Schema = {
     }
 }
 
+export const getShipmentsSchema: Schema = {
+    index: {
+        in: ['params'],
+        optional: true,
+        trim: true,
+    },
+    amount: {
+        in: ['params'],
+        optional: true,
+        errorMessage: 'amount should be a number',
+        toInt: true,
+        isInt: true,
+    }
+}
+
 export const shipmentExistsSchema: Schema = {
     id: {
         in: ['params'],

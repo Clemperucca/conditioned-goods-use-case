@@ -8,4 +8,5 @@ export default class Shipment {
     public id: string; 
     public temperature?: Measurement;
     public sensors: Array<string>;
+    public createdAt: number;
 }

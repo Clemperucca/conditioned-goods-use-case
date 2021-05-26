@@ -5,7 +5,7 @@ import { SmartContractUtil } from './ts-smart-contract-util';
 import * as os from 'os';
 import * as path from 'path';
 
-import {toObject} from '../src/helpers';
+import {toObject} from '../src/libs/helpers';
 import Measurement from '../src/models/Measurement';
 import Shipment from '../src/models/Shipment';
 
@@ -46,20 +46,21 @@ describe('MeasurementContract-blockchain-backend@1.0.0' , () => {
 
     describe('AddMeasurement', () => {
         it('should submit AddMeasurement transaction', async () => {
+            let date = Date.now();
             // Add shipment
             await SmartContractUtil.submitTransaction('ShipmentContract', 'addShipment', ['7'], gateway);
             
             // Register sensor
             await SmartContractUtil.submitTransaction('ShipmentContract', 'registerSensor', ['7','1'], gateway);
 
-            const response: Buffer = await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['7', '1', '-10', `${new Date()}`], gateway);
+            const response: Buffer = await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['1', '-10', `${date}`], gateway);
             
             const measurement = toObject<Measurement>(response);
 
-            // Match it to this object, since we cannot predict the timstamp.
             const expected = {
                 sensorID: "1",
                 value: -10,
+                timestamp: date,
             } 
 
              expect(measurement).toMatchObject(expected);
@@ -68,6 +69,8 @@ describe('MeasurementContract-blockchain-backend@1.0.0' , () => {
 
     describe('GetMeasurement', () => {
         it('should submit GetMeasurement transaction', async () => {
+            let date = Date.now();
+
             // Add shipment
             await SmartContractUtil.submitTransaction('ShipmentContract', 'addShipment', ['8'], gateway);
 
@@ -75,15 +78,15 @@ describe('MeasurementContract-blockchain-backend@1.0.0' , () => {
             await SmartContractUtil.submitTransaction('ShipmentContract', 'registerSensor', ['8','1'], gateway);
 
             // Add measurement
-            await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['8', '1', '-10', `${new Date()}`], gateway);
+            await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['1', '-10', `${date}`], gateway);
 
             const response: Buffer = await SmartContractUtil.evaluateTransaction('MeasurementContract', 'getMeasurement', ['8'], gateway);
             const measurement = toObject<Measurement>(response);
 
-            // Match it to this object, since we cannot predict the timstamp.
             const expected = {
                 sensorID: "1",
                 value: -10,
+                timestamp: date,
             } 
 
             expect(measurement).toMatchObject(expected);
@@ -99,10 +102,12 @@ describe('MeasurementContract-blockchain-backend@1.0.0' , () => {
             await SmartContractUtil.submitTransaction('ShipmentContract', 'registerSensor', ['9','1'], gateway);
 
             // Add measurement
-            await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['9', '1', '-10', `${new Date()}`], gateway);
+            let firstDate = Date.now();
+            await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['1', '-10', `${firstDate}`], gateway);
 
             // Add second measurement
-            await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['9', '1', '-8', `${new Date()}`], gateway);
+            let secondDate = Date.now();
+            await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['1', '-8', `${secondDate}`], gateway);
 
             const response: Buffer = await SmartContractUtil.evaluateTransaction('MeasurementContract', 'getHistory', ['9'], gateway);
             
@@ -111,10 +116,12 @@ describe('MeasurementContract-blockchain-backend@1.0.0' , () => {
             const expected1 = {
                 sensorID: "1",
                 value: -10,
+                timestamp: firstDate,
             };
             const expected2 = {
                 sensorID: "1",
                 value: -8,
+                timestamp: secondDate,
             }
             
             expect(measurement).toContainEqual(expect.objectContaining(expected1));
@@ -131,7 +138,7 @@ describe('MeasurementContract-blockchain-backend@1.0.0' , () => {
             await SmartContractUtil.submitTransaction('ShipmentContract', 'registerSensor', ['10','1'], gateway);
 
             // Add measurement
-            await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['10', '1', '-10', `${new Date()}`], gateway);
+            await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['1', '-10', `${new Date()}`], gateway);
 
             const response: Buffer = await SmartContractUtil.evaluateTransaction('MeasurementContract', 'validateSLA', ['10', '-9'], gateway);
             
@@ -148,7 +155,7 @@ describe('MeasurementContract-blockchain-backend@1.0.0' , () => {
             await SmartContractUtil.submitTransaction('ShipmentContract', 'registerSensor', ['10','1'], gateway);
 
             // Add measurement
-            await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['10', '1', '-10', `${new Date()}`], gateway);
+            await SmartContractUtil.submitTransaction('MeasurementContract', 'addMeasurement', ['1', '-10', `${new Date()}`], gateway);
 
             const response: Buffer = await SmartContractUtil.evaluateTransaction('MeasurementContract', 'validateSLA', ['10', '500'], gateway);
             

@@ -10,7 +10,8 @@
   "scripts": {
     "start": "fabric-chaincode-node start",
     "build": "tsc",
-    "build:watch": "tsc -w"
+    "build:watch": "tsc -w",
+    "postbuild": "cp -av ./META-INF dist/"
   },
   "engine-strict": true,
   "license": "MIT",

@@ -23,14 +23,6 @@ export const getMeasurementSchema: Schema = {
 }
 
 export const addMeasurementSchema: Schema = {
-    id: {
-        in: ['body'],
-        errorMessage: 'id is required',
-        isLength: {
-            options: {min: 1},
-        },
-        trim: true,
-    },
     sensorID: {
         in: ['body'],
         errorMessage: 'SensorID is required',
@@ -42,6 +34,12 @@ export const addMeasurementSchema: Schema = {
     value: {
         in: ['body'],
         errorMessage: 'value should be an INT',
+        isInt: true,
+        toInt: true,
+    },
+    timestamp: {
+        in: ['body'],
+        errorMessage: 'timestamp should be an INT (amount of milliseconds since 1970)',
         isInt: true,
         toInt: true,
     }

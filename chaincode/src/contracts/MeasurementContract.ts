@@ -2,15 +2,15 @@ import {Context, Contract} from 'fabric-contract-api';
 import Measurement from '../models/Measurement';
 import Shipment from '../models/Shipment';
 import {ShipmentContract} from './ShipmentContract';
-import {toBytes, toObject, toArrayOfObjects} from '../helpers';
+import {toBytes, toObject, toArrayOfObjects} from '../libs/helpers';
 import SLA from '../SLA.json';
-import {isInRange} from '../validate';
-import {sendMail} from '../mail';
+import {isInRange} from '../libs/validate';
+import {sendMail} from '../libs/mail';
 import {getHtml, getText} from '../mails/temperature';
 
-// Note: removed ts annotations because they currently do not allow nested objects.
 /** 
  * Handles the measurements in the shipments. 
+ * Note: removed ts annotations because they currently do not allow nested objects.
  */
 export class MeasurementContract extends Contract {
     private shipmentContract: ShipmentContract;
@@ -36,6 +36,7 @@ export class MeasurementContract extends Contract {
 
     /** 
      * Get measurement history
+     * NOTE: it's currently not possible to use pagination on the history query (https://jira.hyperledger.org/browse/FAB-12881, https://jira.hyperledger.org/browse/FAB-12183)
      */
     public async getHistory(ctx: Context, id: string) {
         const iterator = ctx.stub.getHistoryForKey(id);
@@ -47,18 +48,15 @@ export class MeasurementContract extends Contract {
 
     /** 
      * Add a measurement to a shipment.
+     * NOTE: timestamp is the amount of milliseconds since 1970 (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#the_ecmascript_epoch_and_timestamps)
      */
-    public async addMeasurement(ctx: Context, id: string, sensorID: string, value: string, timestamp: string) {
-        let shipment: Shipment = await this.shipmentContract.getShipment(ctx, id);
+    public async addMeasurement(ctx: Context, sensorID: string, value: string, timestamp: string) {
+        let shipment: Shipment = await this.shipmentContract.getShipmentBySensor(ctx, sensorID);
         let temperature = parseInt(value);
-        let date = Date.parse(timestamp);
+        let date = parseInt(timestamp);
 
-        if (!shipment.sensors.includes(sensorID)) {
-            throw new Error(`Sensor is not registered to this shipment.`);
-        }
-
-        if (!await this.validateSLA(ctx, id, temperature)) {
-            await sendMail(`Shipment #${id}`, getText(id, value), getHtml(id, value));
+        if (!await this.validateSLA(ctx, shipment.id, temperature)) {
+            await sendMail(`Shipment #${shipment.id}`, getText(shipment.id, value), getHtml(shipment.id, value));
         }
 
         shipment.temperature = {
@@ -67,7 +65,7 @@ export class MeasurementContract extends Contract {
             timestamp: date,
         };
 
-        await ctx.stub.putState(id, toBytes<Shipment>(shipment));
+        await ctx.stub.putState(shipment.id, toBytes<Shipment>(shipment));
 
         return shipment.temperature;
     }

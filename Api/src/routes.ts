@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {Schema} from "express-validator";
 import {getShipments, getShipment, shipmentExist, hasSensor, addShipment, registerSensor, updateShipment } from './controllers/shipments';
-import {shipmentAddSchema, getShipmentSchema, shipmentExistsSchema, hasSensorSchema} from './schemas/shipmentschema';
+import {shipmentAddSchema, getShipmentsSchema, getShipmentSchema, shipmentExistsSchema, hasSensorSchema} from './schemas/shipmentschema';
 import {getHistorySchema, getMeasurementSchema, addMeasurementSchema} from './schemas/measurementschema';
 import {getHistory, getMeasurement, addMeasurement} from './controllers/measurements';
 
@@ -9,7 +9,7 @@ import {getHistory, getMeasurement, addMeasurement} from './controllers/measurem
  * API routes.
  */
 export enum routes {
-    SHIPMENTS = '/shipments',
+    SHIPMENTS = '/shipments/:index?/:amount?',
     SHIPMENT = '/shipment/:id',
     SHIPMENTEXIST = '/shipment/:id/exist',
     HASSENSOR = '/shipment/:id/sensor/:sensorID',
@@ -18,7 +18,7 @@ export enum routes {
     UPDATESHIPMENT = '/shipment/:id/update',
     GETHISTORY = '/shipment/:id/measurements',
     GETMEASUREMENT ='/shipment/:id/measurement',
-    ADDMEASUREMENT = '/shipment/measurement/add'
+    ADDMEASUREMENT = '/shipment/measurement/add',
 }
 
 export enum routeTypes {
@@ -36,7 +36,7 @@ type Route = {
  * Resolve get routes.
  */
 export const routeResolver: {[index: string]: Route} = {
-    [routes.SHIPMENTS]: {type: routeTypes.GET, func: getShipments},
+    [routes.SHIPMENTS]: {type: routeTypes.GET, schema: getShipmentsSchema, func: getShipments},
     [routes.SHIPMENT]: {type: routeTypes.GET, schema: getShipmentSchema, func: getShipment},
     [routes.SHIPMENTEXIST]: {type: routeTypes.GET, schema: shipmentExistsSchema, func: shipmentExist},
     [routes.HASSENSOR]: {type: routeTypes.GET, schema: hasSensorSchema, func: hasSensor},

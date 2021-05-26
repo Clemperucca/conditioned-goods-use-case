@@ -1,5 +1,6 @@
 import express, {Request, Response} from "express";
 import {validationResult} from "express-validator";
+import cors from 'cors';
 import dotenv from 'dotenv';
 import {checkSchema} from 'express-validator';
 import {routeTypes, routeResolver} from './routes';
@@ -8,6 +9,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 for (const [key, value] of Object.entries(routeResolver)) {
     const {type, schema = {}, func} = value;
@@ -28,7 +30,7 @@ for (const [key, value] of Object.entries(routeResolver)) {
 // start the Express server.
 app.listen(process.env.PORT, () => {
     // tslint:disable-next-line:no-console
-    console.log(`🚀 Server ready!`)
-  });
+    console.log(`🚀 Server ready on http://localhost:`+process.env.PORT+` !`)
+});
 
 export default app;

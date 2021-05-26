@@ -53,11 +53,11 @@ import {Measurement, Shipment} from '../types';
     }
   }
 
-  /**
+/**
  * Add Measurement
  */
    export async function addMeasurement({body}: Request, res: Response) {
-    const {id, sensorID, value} = body;
+    const {sensorID, value, timestamp} = body;
     const gateway = await connect();
   
     try {
@@ -68,7 +68,7 @@ import {Measurement, Shipment} from '../types';
       const contract = network.getContract('blockchain-backend', 'MeasurementContract');
   
       // Query data
-      const result = await contract.submitTransaction('addMeasurement', `${id}`,`${sensorID}`, `${value}`);
+      const result = await contract.submitTransaction('addMeasurement',`${sensorID}`, `${value}`, `${timestamp}`);
   
       res.json(toObject<Shipment>(result));
     } catch(err) {

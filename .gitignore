@@ -1,4 +1,7 @@
-.env
+frontend/.env
+Api/.env
+chaincode/.env
+frontend/.env
 package-lock.json
 yarn.lock
 index.js

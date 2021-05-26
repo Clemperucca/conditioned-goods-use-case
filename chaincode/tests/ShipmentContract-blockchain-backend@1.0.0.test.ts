@@ -4,7 +4,7 @@ import {SmartContractUtil} from './ts-smart-contract-util';
 import * as os from 'os';
 import * as path from 'path';
 
-import {toObject} from '../src/helpers';
+import {toObject} from '../src/libs/helpers';
 import Shipment from '../src/models/Shipment';
 
 describe('ShipmentContract-blockchain-backend@1.0.0' , () => {
@@ -46,12 +46,13 @@ describe('ShipmentContract-blockchain-backend@1.0.0' , () => {
 
             const shipment = toObject<Shipment>(response);
 
-            const expected: Shipment = {
+            // Match to this object since we cannot predict the timestamp.
+            const expected = {
                 id: '1',
                 sensors: [],
             }
 
-            expect(shipment).toEqual(expected);
+            expect(shipment).toMatchObject(expected);
         });
     });
 
@@ -64,12 +65,13 @@ describe('ShipmentContract-blockchain-backend@1.0.0' , () => {
             
             const shipment = toObject<Shipment>(response);
 
-            const expected: Shipment = {
+            // Match to this object since we cannot predict the timestamp.
+            const expected = {
                 id: '2',
                 sensors: [],
             }
 
-            expect(shipment).toEqual(expected);
+            expect(shipment).toMatchObject(expected);
         });
     });
 
@@ -82,12 +84,13 @@ describe('ShipmentContract-blockchain-backend@1.0.0' , () => {
             
             const shipment = toObject<Shipment>(response);
 
-            const expected: Shipment = {
+            // Match to this object since we cannot predict the timestamp.
+            const expected = {
                 id: '3',
                 sensors: [],
             }
 
-            expect(shipment).toEqual(expected);
+            expect(shipment).toMatchObject(expected);
         });
     });
 
@@ -111,14 +114,16 @@ describe('ShipmentContract-blockchain-backend@1.0.0' , () => {
 
             const response: Buffer = await SmartContractUtil.evaluateTransaction('ShipmentContract', 'getShipments', [], gateway);
             
-            const shipment = toObject<Array<Shipment>>(response);
+            const shipments = toObject<Array<Shipment>>(response);
 
-            const expected: Shipment = {
+            const expected = {
                 id: '5',
                 sensors: [],
             };
 
-            expect(shipment).toContainEqual(expected);
+            expect(shipments).toEqual(
+                expect.arrayContaining([expect.objectContaining(expected)])
+            )
         });
     });
 
